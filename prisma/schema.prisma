@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Schools {
+  schoolId      Int      @id @default(autoincrement())
+  schoolName    String?  @db.VarChar(30)
+  schoolAddress String?  @db.Text
+  schoolCity    String?  @db.VarChar(30)
+  schoolState   String?  @db.VarChar(30)
+  contactNo     String?  @db.VarChar(30)
+  schoolEmail   String?  @db.VarChar(50)
+  image         String?  @db.Text
+  user          Users?    @relation(fields: [userId], references: [id]) // Define the one-to-one relationship with User
+  userId        Int     @unique 
+}
+
+model Users {
+  id           Int      @id @default(autoincrement()) 
+  username     String?  @db.VarChar(50)
+  email        String?  @db.VarChar(50)
+  name         String?  @db.VarChar(30)
+  contactNo    String?  @db.VarChar(30)
+  password     String?  @db.VarChar(50)
+  role         String   @default("user")
+  school       Schools?  // Define the optional relationship with School
+  schoolId     Int?     // Define schoolId as an optional field
+}
